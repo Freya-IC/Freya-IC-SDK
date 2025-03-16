@@ -1,17 +1,17 @@
 ﻿using EdjCase.ICP.Agent.Identities;
 using FreyaSDK.Models.json;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using publicKey = System.String;
 
 namespace FreyaSDK
 {
     public static class OdinFunAPI
     {
+        /// <summary>
+        /// One-time account registration for Odin.fun - Used to initialize new identities in the odin.fun system
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
         public static async Task<string> AuthIdentity(Ed25519Identity identity)
         {
             using (HttpClient client = new HttpClient())

@@ -32,12 +32,12 @@ namespace FreyaSDK
             return reply.ToObjects<TokenAmount>(this.Converter);
         }
 
-        public async Task<GetLockedTokensReturnArg0> GetLockedTokens(string arg0)
+        public async Task<LockedTokenState> GetLockedTokens(string arg0)
         {
             CandidArg arg = CandidArg.FromCandid(CandidTypedValue.FromObject(arg0, this.Converter));
             QueryResponse response = await this.Agent.QueryAsync(this.CanisterId, "getLockedTokens", arg);
             CandidArg reply = response.ThrowOrGetReply();
-            return reply.ToObjects<GetLockedTokensReturnArg0>(this.Converter);
+            return reply.ToObjects<LockedTokenState>(this.Converter);
         }
 
         public async Task<OptionalValue<Operation>> GetOperation(string arg0, TokenAmount arg1)
@@ -289,48 +289,7 @@ namespace FreyaSDK
             }
 
         }
-        public class GetLockedTokensReturnArg0
-        {
-            [CandidName("liquidity")]
-            public LiquidityInfo Liquidity { get; set; }
 
-            [CandidName("trade")]
-            public TradeInfo Trade { get; set; }
 
-            [CandidName("withdraw")]
-            public WithdrawInfo Withdraw { get; set; }
-
-            public GetLockedTokensReturnArg0(LiquidityInfo liquidity, TradeInfo trade, WithdrawInfo withdraw)
-            {
-                this.Liquidity = liquidity;
-                this.Trade = trade;
-                this.Withdraw = withdraw;
-            }
-
-            public GetLockedTokensReturnArg0()
-            {
-
-            }
-        }
-        public class LiquidityInfo : List<TokenID>
-        {
-            public LiquidityInfo()
-            {
-            }
-        }
-
-        public class TradeInfo : List<TokenID>
-        {
-            public TradeInfo()
-            {
-            }
-        }
-
-        public class WithdrawInfo : List<TokenID>
-        {
-            public WithdrawInfo()
-            {
-            }
-        }
     }
 }
