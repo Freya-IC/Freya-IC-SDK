@@ -1,4 +1,5 @@
 ﻿using EdjCase.ICP.Agent.Identities;
+using FreyaSDK.Models;
 using FreyaSDK.Models.json;
 using Newtonsoft.Json;
 using System.Text;
@@ -53,6 +54,128 @@ namespace FreyaSDK
                     return "ERROR";
                 }
             }
+        }
+        /// <summary>
+        /// Get recently traded Odin.fun tokens
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<OdinFunTokens?> GetOdinFunTokens()
+        {
+            string url = "https://api.odin.fun/v1/tokens?sort=last_action_time%3Adesc&page=1&limit=100";
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                OdinFunTokens? odinFunTokens = JsonConvert.DeserializeObject<OdinFunTokens>(responseBody);
+                if (odinFunTokens != null)
+                {
+                    return odinFunTokens;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Get recently traded Odin.fun tokens
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<Holders?> GetHolders(string id)
+        {
+            string url = "https://api.odin.fun/v1/token/" + id + "/owners?page=1&limit=10";
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Holders? holders = JsonConvert.DeserializeObject<Holders>(responseBody);
+                if (holders != null)
+                {
+                    return holders;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
+        /// <summary>
+        /// Get recently traded Odin.fun tokens
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<TokenData?> GetOdinFunToken(string id)
+        {
+            string url = "https://api.odin.fun/v1/token/" + id;
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                TokenData? odinFunToken = JsonConvert.DeserializeObject<TokenData>(responseBody);
+                if (odinFunToken != null)
+                {
+                    return odinFunToken;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
+        /// <summary>
+        /// Get Odin.fun user
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<OdinUser?> GetOdinFunUser(string principal_id)
+        {
+            string url = "https://api.odin.fun/v1/user/" + principal_id;
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                OdinUser? odinFunUser = JsonConvert.DeserializeObject<OdinUser>(responseBody);
+                if (odinFunUser != null)
+                {
+                    return odinFunUser;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
+        /// <summary>
+        /// Retrieve Odin.fun trades for a specific token
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public static async Task<TokenTrades?> GetOdinFunTrades(TokenTarget target)
+        {
+            string url = "https://api.odin.fun/v1/token/" + target.Id + "/trades?page=1&limit=9999&time_min=" + target.LastActionTimestamp;
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                TokenTrades? tokenTrades = JsonConvert.DeserializeObject<TokenTrades>(responseBody);
+                if (tokenTrades != null)
+                {
+                    return tokenTrades;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
         }
     }
 }
