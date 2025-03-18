@@ -29,7 +29,6 @@ namespace FreyaSDK
                         signature = Convert.ToBase64String(identity.Sign(Encoding.UTF8.GetBytes(_timestamp))),
                         referrer = ""
                     };
-
                     string jsonData = JsonConvert.SerializeObject(auth);
                     var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                     HttpResponseMessage response = await client.PostAsync("https://api.odin.fun/v1/auth", content);
@@ -144,6 +143,61 @@ namespace FreyaSDK
                 if (odinFunUser != null)
                 {
                     return odinFunUser;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
+        /// <summary>
+        /// Get Odin.fun user
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<UserBalances?> GetUserBalances(string principal_id)
+        {
+            string url = "https://api.odin.fun/v1/user/" + principal_id+"/balances";
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                UserBalances? balances = JsonConvert.DeserializeObject<UserBalances>(responseBody);
+                if (balances != null)
+                {
+                    return balances;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
+        /// <summary>
+        /// Get Odin.fun user
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<UserBalance?> GetUserTokenBalance(string principal_id, string token_id)
+        {
+            string url = "https://api.odin.fun/v1/user/" + principal_id + "/balances";
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                UserBalances? balances = JsonConvert.DeserializeObject<UserBalances>(responseBody);
+                if (balances != null)
+                {
+                    foreach (var userbalance in balances.data)
+                    {
+                        if(userbalance.id == token_id)
+                        {
+                            return userbalance;
+                        }
+                    }
+                    return null;
                 }
                 else
                 {

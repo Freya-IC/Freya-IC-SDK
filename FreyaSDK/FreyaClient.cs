@@ -18,9 +18,11 @@ namespace FreyaSDK
         public Principal CanisterId { get; }
         public CandidConverter? Converter { get; }
 
-        public FreyaClient(IAgent agent, Principal canisterId, CandidConverter? converter = default)
+        public FreyaClient(IAgent agent, Principal? canisterId = null, CandidConverter? converter = default)
         {
             this.Agent = agent;
+            if (canisterId == null)
+                canisterId = Principal.FromText("z2vm5-gaaaa-aaaaj-azw6q-cai");
             this.CanisterId = canisterId;
             this.Converter = converter;
         }
@@ -137,7 +139,7 @@ namespace FreyaSDK
         {
             return Decimal.Round((decimal)satoshis / (decimal)100000000000, 0);
         }
-        static decimal CalculatePercentDifference(decimal a, decimal b)
+       public static decimal CalculatePercentDifference(decimal a, decimal b)
         {
             // Formula: |A - B| / ((A + B) / 2) * 100
             decimal difference = Math.Abs(a - b);
