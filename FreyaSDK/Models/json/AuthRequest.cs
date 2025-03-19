@@ -4,7 +4,7 @@ namespace FreyaSDK.Models.json
 {
     public class AuthRequest
     {
-        public string publickey {  get; set; }
+        public string publickey { get; set; }
         public string timestamp { get; set; }
 
         public string signature { get; set; }

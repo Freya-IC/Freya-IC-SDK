@@ -9,7 +9,7 @@ namespace FreyaSDK
     public static class OdinFunAPI
     {
         /// <summary>
-        /// One-time account registration for Odin.fun - Used to initialize new identities in the odin.fun system
+        /// Auth token & identity registration request
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
@@ -35,6 +35,55 @@ namespace FreyaSDK
 
                     if (response.IsSuccessStatusCode)
                     {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Response received: " + responseBody);
+                        return responseBody;
+                    }
+                    else
+                    {
+                        string errorBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Error: {response.StatusCode}, Body: {errorBody}");
+                        return "ERROR";
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception occurred: " + ex.Message);
+                    return "ERROR";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Change your username using Auth token
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
+        public static async Task<string> ChangeUsername(string username, string principal_id, string auth_token)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    var boundary = "----WebKitFormBoundaryjW7X11NmhWkQGgWH";
+                    var body = new StringBuilder();
+                    body.AppendLine($"--{boundary}");
+                    body.AppendLine("Content-Disposition: form-data; name=\"username\"");
+                    body.AppendLine();
+                    body.AppendLine(username);
+                    body.AppendLine($"--{boundary}--"); // Final boundary
+                    var content = new StringContent(body.ToString(), Encoding.UTF8);
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", auth_token);
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("multipart/form-data")
+                    {
+                        Parameters = { new System.Net.Http.Headers.NameValueHeaderValue("boundary", boundary) }
+                    };
+                    HttpResponseMessage response = await client.PostAsync("https://api.odin.fun/v1/user/profile?user=" + principal_id, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
                         string responseBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine("Response received: " + responseBody);
                         return responseBody;
@@ -157,7 +206,7 @@ namespace FreyaSDK
         /// <returns></returns>
         public static async Task<UserBalances?> GetUserBalances(string principal_id)
         {
-            string url = "https://api.odin.fun/v1/user/" + principal_id+"/balances";
+            string url = "https://api.odin.fun/v1/user/" + principal_id + "/balances";
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage response = await client.GetAsync(url);
@@ -192,7 +241,7 @@ namespace FreyaSDK
                 {
                     foreach (var userbalance in balances.data)
                     {
-                        if(userbalance.id == token_id)
+                        if (userbalance.id == token_id)
                         {
                             return userbalance;
                         }

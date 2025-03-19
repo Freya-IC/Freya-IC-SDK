@@ -2,11 +2,8 @@
 using EdjCase.ICP.Agent.Agents;
 using EdjCase.ICP.Agent.Responses;
 using EdjCase.ICP.Candid;
-using EdjCase.ICP.Candid.Mapping;
 using EdjCase.ICP.Candid.Models;
 using FreyaSDK.Models;
-using FreyaSDK.Models.json;
-using Newtonsoft.Json;
 using TokenAmount = EdjCase.ICP.Candid.Models.UnboundedUInt;
 using TokenID = System.String;
 
@@ -139,7 +136,7 @@ namespace FreyaSDK
         {
             return Decimal.Round((decimal)satoshis / (decimal)100000000000, 0);
         }
-       public static decimal CalculatePercentDifference(decimal a, decimal b)
+        public static decimal CalculatePercentDifference(decimal a, decimal b)
         {
             // Formula: |A - B| / ((A + B) / 2) * 100
             decimal difference = Math.Abs(a - b);
