@@ -13,7 +13,7 @@ namespace FreyaSDK
         /// </summary>
         /// <param name="identity"></param>
         /// <returns></returns>
-        public static async Task<string> AuthIdentity(Ed25519Identity identity)
+        public static async Task<AuthToken?> AuthIdentity(Ed25519Identity identity)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -36,21 +36,22 @@ namespace FreyaSDK
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
+                        AuthToken? auth_token = JsonConvert.DeserializeObject<AuthToken>(responseBody);
                         Console.WriteLine("Response received: " + responseBody);
-                        return responseBody;
+                        return auth_token;
                     }
                     else
                     {
                         string errorBody = await response.Content.ReadAsStringAsync();
                         Console.WriteLine($"Error: {response.StatusCode}, Body: {errorBody}");
-                        return "ERROR";
+                        return null;
                     }
 
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Exception occurred: " + ex.Message);
-                    return "ERROR";
+                    return null;
                 }
             }
         }
