@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+using TokenAmount = EdjCase.ICP.Candid.Models.UnboundedUInt;
 namespace FreyaSDK.Models
 {
     public class OdinFunTokens
@@ -25,7 +26,7 @@ namespace FreyaSDK.Models
         public string rune { get; set; }
         public bool featured { get; set; }
         public int holder_count { get; set; }
-        public int holder_top { get; set; }
+        public TokenAmount holder_top { get; set; }
         public long holder_dev { get; set; }
         public int comment_count { get; set; }
         public long sold { get; set; }
@@ -42,8 +43,8 @@ namespace FreyaSDK.Models
         public long user_token_liquidity { get; set; }
         public long user_lp_tokens { get; set; }
         public long total_supply { get; set; }
-        public int swap_fees { get; set; }
-        public int swap_fees_24 { get; set; }
+        public TokenAmount swap_fees { get; set; }
+        public TokenAmount swap_fees_24 { get; set; }
         public long swap_volume { get; set; }
         public long swap_volume_24 { get; set; }
         public long threshold { get; set; }

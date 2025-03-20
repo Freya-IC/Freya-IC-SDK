@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+using TokenAmount = EdjCase.ICP.Candid.Models.UnboundedUInt;
 namespace FreyaSDK.Models.json
 {
 
@@ -13,7 +14,7 @@ namespace FreyaSDK.Models.json
         public string ref_code { get; set; }
         public object profit { get; set; }
         public object total_asset_value { get; set; }
-        public int referral_earnings { get; set; }
+        public TokenAmount referral_earnings { get; set; }
         public int referral_count { get; set; }
         public bool access_allowed { get; set; }
         public string beta_access_codes { get; set; }
