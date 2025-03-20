@@ -104,6 +104,26 @@ namespace FreyaSDK
                 }
             }
         }
+
+        public static async Task<BTCInfo> GetBTCPrice()
+        {
+            string url = "https://api.odin.fun/v1/currency/btc";
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                BTCInfo? btc_info = JsonConvert.DeserializeObject<BTCInfo>(responseBody);
+                if (btc_info != null)
+                {
+                    return btc_info;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
         /// <summary>
         /// Get recently traded Odin.fun tokens
         /// </summary>
