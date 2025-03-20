@@ -55,3 +55,15 @@ if(user != null)
     Console.WriteLine(user.btc_wallet_address); 
 }
 ```
+
+#### Change OdinFun Username
+Call the odin.fun API to change your username using auth tokens
+
+```
+Ed25519Identity? trader = Ed25519Identity.FromPrivateKey(Convert.FromBase64String("private-key-here"));
+AuthToken? auth = await OdinFunAPI.AuthIdentity(trader);
+if (auth != null)
+{
+    string response = await OdinFunAPI.ChangeUsername("new-username-here", trader.GetPublicKey().ToPrincipal().ToString(), auth.token );
+}
+```
