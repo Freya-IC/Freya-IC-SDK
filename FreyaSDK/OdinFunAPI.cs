@@ -27,7 +27,7 @@ namespace FreyaSDK
                         publickey = Convert.ToBase64String(identity.GetPublicKey().ToDerEncoding()),
                         timestamp = _timestamp,
                         signature = Convert.ToBase64String(identity.Sign(Encoding.UTF8.GetBytes(_timestamp))),
-                        referrer = ""
+                        referrer = "eei35ur6uj"
                     };
                     string jsonData = JsonConvert.SerializeObject(auth);
                     var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -104,7 +104,53 @@ namespace FreyaSDK
                 }
             }
         }
+      /// <summary>
+      /// Post a comment
+      /// </summary>
+      /// <param name="comment_message"></param>
+      /// <param name="principal_id"></param>
+      /// <param name="token_id"></param>
+      /// <param name="auth_token"></param>
+      /// <returns></returns>
+        public static async Task<string> PostComment(string comment_message, string principal_id, string token_id, string auth_token)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    DateTimeOffset now = DateTimeOffset.UtcNow;
+                    long unixTimestamp = now.ToUnixTimeMilliseconds();
+                    string _timestamp = unixTimestamp.ToString();
+                    CommentRequest comment = new CommentRequest
+                    {
+                        message = comment_message
+                    };
+                    string jsonData = JsonConvert.SerializeObject(comment);
+                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", auth_token);
+                    HttpResponseMessage response = await client.PostAsync("https://api.odin.fun/v1/token/"+token_id+"/comment?user="+principal_id, content);
 
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Response received: " + responseBody);
+                        return responseBody;
+                    }
+                    else
+                    {
+                        string errorBody = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine($"Error: {response.StatusCode}, Body: {errorBody}");
+                        return null;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception occurred: " + ex.Message);
+                    return null;
+                }
+            }
+        }
         public static async Task<BTCInfo> GetBTCPrice()
         {
             string url = "https://api.odin.fun/v1/currency/btc";

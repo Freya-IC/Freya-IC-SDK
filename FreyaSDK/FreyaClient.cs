@@ -130,7 +130,7 @@ namespace FreyaSDK
         }
         public static decimal ConvertToBTC(long satoshis)
         {
-            return Decimal.Round((decimal)satoshis / (decimal)1000, 3);
+            return Decimal.Round((decimal)satoshis / (decimal)1000, 6);
         }
         public static decimal ConvertToTokenAmount(long satoshis)
         {
