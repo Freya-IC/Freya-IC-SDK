@@ -194,7 +194,30 @@ namespace FreyaSDK
             }
 
         }
+        /// <summary>
+        /// Get highest marketcap Odin.fun tokens
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<OdinFunTokens?> GetTokensByHighestMarketcap()
+        {
+            string url = "https://api.odin.fun/v1/tokens?sort=marketcap%3Adesc&page=1&limit=25";
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                OdinFunTokens? odinFunTokens = JsonConvert.DeserializeObject<OdinFunTokens>(responseBody);
+                if (odinFunTokens != null)
+                {
+                    return odinFunTokens;
+                }
+                else
+                {
+                    return null;
+                }
+            }
 
+        }
         /// <summary>
         /// Get recently traded Odin.fun tokens
         /// </summary>
