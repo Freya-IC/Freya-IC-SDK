@@ -67,3 +67,11 @@ if (auth != null)
     string response = await OdinFunAPI.ChangeUsername("new-username-here", trader.GetPublicKey().ToPrincipal().ToString(), auth.token );
 }
 ```
+
+#### Post comment on Odinfun token page
+Call the odin.fun API to comment on a token
+```
+   Ed25519Identity? trader = Ed25519Identity.FromPrivateKey(Convert.FromBase64String("PRIVATE KEY HERE"));
+   AuthToken auth = await OdinFunAPI.AuthIdentity(trader);
+   string comment_response = await OdinFunAPI.PostComment("To the moon", trader.GetPublicKey().ToPrincipal().ToString(), "TOKEN ID HERE", auth.token);
+```
